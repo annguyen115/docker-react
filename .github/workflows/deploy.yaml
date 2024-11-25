@@ -31,12 +31,8 @@ jobs:
       - name: Build Docker image for deployment
         run: docker build -t andqnguyen/react-prod -f Dockerfile .
 
-      - name: Run Docker container
-        run: docker run andqnguyen/react-prod
-
       - name: Generate deployment package
-        # run: zip -r deploy.zip . -x '*.git*'
-        run: zip -r deploy.zip ./build/*
+        run: zip -r deploy.zip . -x '*.git*'
 
       - name: Upload deployment package
         uses: actions/upload-artifact@v4
