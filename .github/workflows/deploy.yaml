@@ -1,12 +1,12 @@
-name: Deploy Frontend
+name: Deploy prod
 on:
   push:
     branches:
       - master
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  test:
+    run-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       # login docker
@@ -17,6 +17,10 @@ jobs:
       # run tests
       - run: docker run -e CI=true andqnguyen/react-test npm run test
 
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
       - name: Generate deployment package
         run: zip -r deploy.zip . -x '*.git*'
 
