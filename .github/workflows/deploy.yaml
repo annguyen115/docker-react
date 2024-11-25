@@ -31,7 +31,8 @@ jobs:
       - name: Build Docker image for deployment
         run: docker build -t andqnguyen/react-prod -f Dockerfile .
 
-      - run: ls -l build
+      - name: Run Docker image
+        run: docker run andqnguyen/react-prod .
 
       - name: Generate deployment package
         # run: zip -r deploy.zip . -x '*.git*'
