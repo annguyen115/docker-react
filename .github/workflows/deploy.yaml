@@ -9,21 +9,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      # login docker
+      # Login to Docker
       - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      # build
+
+      # Build Docker image for testing
       - run: docker build -t andqnguyen/react-test -f Dockerfile.dev .
 
-      # run tests
+      # Run tests
       - run: docker run -e CI=true andqnguyen/react-test npm run test
 
   build:
     needs: test
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+
+      # Login to Docker
+      - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      # Build Docker image for deployment
+      - run: docker build -t andqnguyen/react-prod -f Dockerfile .
+
+      # Generate deployment package
       - name: Generate deployment package
         run: zip -r deploy.zip . -x '*.git*'
 
+      # Upload package
       - name: Upload deployment package
         uses: actions/upload-artifact@v3
         with:
